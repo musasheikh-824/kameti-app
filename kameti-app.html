@@ -1,0 +1,163 @@
+<html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background-color: rgb(196, 235, 196);
+        }
+
+        h1 {
+            color: rgb(255, 255, 255);
+            text-shadow: 2px 2px 4px darkgreen, 6px 6px 4px rgb(0, 0, 0);
+            font-size: 50px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #container {
+            width: 400px;
+            margin: 10px auto;
+        }
+
+        #Namelist {
+            margin: 10px 0px;
+        }
+
+        #Namelist li {
+            list-style-type: none;
+            margin: 10px 0px;
+            font-size: 30px;
+            text-shadow: 1px 1px 6px white;
+            font-weight: 600;
+            border-radius: 10px;
+            border: 2px solid black;
+            background-color: aliceblue;
+        }
+
+        input {
+            padding: 10px 10px;
+            background-color: aliceblue;
+            border: 2px solid rgb(1, 82, 25);
+            font-size: 17px;
+        }
+
+        #countdown {
+            font-size: 80px;
+            font-weight: 600;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            color: black;
+            text-shadow: 4px 4px 10px black, 8px 8px 10px gray;
+            color: rgb(208, 233, 255);
+        }
+
+        #congratulation {
+            font-size: 40px;
+            color: rgb(255, 255, 255);
+            text-shadow: 2px 2px 4px darkgreen, 6px 6px 4px rgb(0, 0, 0);
+            font-weight: 600;
+        }
+
+        button {
+            background-color: darkgreen;
+            color: aliceblue;
+            font-size: 20px;
+            font-weight: 400;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <h1>Kameti nikalo App</h1>
+        <input type="text" id="nameInput" class="abc" placeholder="Enter Member Name">
+        <button class="btn abc" onclick="addname()">Add Member</button>
+        <ul id="Namelist" class="Nmaelist"></ul>
+        <button id="startbutton" class="btn hidden" onclick="startCountdown()">Kameti Nikalo</button>
+        <p id="countdown" class="hidden"></p>
+        <p id="congratulation" class="hidden"></p>
+    </div>
+    <script>
+        const Namelist = [];
+        let countdownInterval;
+        function addname() {
+            const nameInput = document.getElementById('nameInput');
+            const name = nameInput.value.trim();
+            if (name) {
+                Namelist.push(name);
+                updateNameList();
+                nameInput.value = '';
+
+                const startbutton = document.getElementById('startbutton');
+                if (Namelist.length >= 5) {
+                    startbutton.classList.remove('hidden');
+                }
+            }
+        }
+        function updateNameList() {
+            const namelistElement = document.getElementById('Namelist');
+            namelistElement.innerHTML = '';
+            Namelist.forEach(name => {
+                const li = document.createElement('li');
+                li.textContent = name;
+                namelistElement.appendChild(li);
+
+            });
+        }
+
+        function startCountdown() {
+
+            document.querySelectorAll(".abc").forEach(item => {
+                item.remove();
+            })
+
+            let seconds = 5;
+            const countdown = document.getElementById('countdown');
+            const startbutton = document.getElementById('startbutton');
+            const congratulation = document.getElementById('congratulation');
+
+            startbutton.classList.add('hidden');
+            countdown.classList.remove('hidden');
+            congratulation.classList.add('hidden');
+            countdown.textContent = seconds;
+
+            countdownInterval = setInterval(() => {
+                seconds--;
+                countdown.textContent = seconds;
+                if (seconds <= 0) {
+                    clearInterval(countdownInterval);
+                    pickWinner();
+                }
+            }, 1000);
+
+
+        }
+        function pickWinner() {
+            const winnerIndex = Math.floor(Math.random() * Namelist.length);
+            const winnerName = Namelist.splice(winnerIndex, 1)[0];
+
+            const congratulation = document.getElementById('congratulation');
+            congratulation.textContent = `Congratulation Mr, ${winnerName}`;
+            congratulation.classList.remove('hidden');
+
+            updateNameList();
+            const startbutton = document.getElementById('startbutton');
+            if (Namelist.length >= 0) {
+                startbutton.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+
+</html>
